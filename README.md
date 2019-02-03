@@ -1,5 +1,5 @@
 ## Basic Ruby Project
-Written By: Andre Merten
+### Written By: Andre Merten
 
 This project serves as a basic introduction to the Ruby Programming Language.
 
