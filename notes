@@ -1,0 +1,612 @@
+The Browser's Request
+
+
+
+Here's an overview of how Rails handles a request.
+
+    Rails looks at the request, to figure out which code should handle it.
+    The request gets routed to an action method on a "controller".
+    The controller loads the resource in from database using a "model class".
+    The controller renders a "view" using the model data, to generate the response content.
+
+To retrieve the URL "http://localhost:3000/posts", your browser sends an HTTP "GET" request.
+
+    Your browser uses a communication standard called HyperText Transfer Protocol, or HTTP, to talk to web servers. That's the "http:" at the start of the URL.
+    "localhost:3000" is the host and port.
+    "/posts" is the path to the resource you want.
+
+When you press Enter to load the URL, your browser sends an HTTP GET request - it gets the page. (There are other HTTP request types like POST and DELETE, too. We'll look at those later.) If you'd like to learn more about the HTTP protocol, check out the HTTP Basics course.
+
+If we switch to the terminal and look in the log, we can see where Rails received the request, and how it was handled.
+
+Started GET "/posts" for ::1 at 2016-05-28 12:37:31 -0700
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (0.1ms)  SELECT "posts".* FROM "posts"
+  Rendered posts/index.html.erb within layouts/application (1.6ms)
+Completed 200 OK in 23ms (Views: 20.2ms | ActiveRecord: 0.1ms)
+
+This log shows where Rails recieved the request, passed it to a controller, loaded some model data, and rendered a view.
+
+
+The controller
+********************
+
+The controller is responsible for handling the browser request. It CONTROLS the model and the view to generate a response.
+
+
+
+When you access the list of all "Post" objects, the request gets sent to the "index" method of the "PostsController" class.
+
+    Rails creates the source code for controller classes in the "app/controllers/" subdirectory.
+    The "PostsController" class will be in "posts_controller.rb".
+    The request is handled by the "index" method or action (controller methods that respond to requests are sometimes called "actions").
+
+
+The controller receives the request, loads the requested data via the MODEL, and then iserts that data into the VIEW in order to render a response. 
+***********************************
+
+The Model
+**************
+
+The model is responsible for storing and retrieving data form users of your app
+
+When you call the "all" method on a model class, each record is converted to an instance of the model class.
+
+**********************
+
+The View
+**************
+
+
+View is responsible for displaying data to the user
+
+-When a browser recieves a request for a page, rails recieves the request and routes it to the appropiate controller class/action method. The controller retrieves the model data and embeds it in the view.
+
+
+###########################################################################3
+
+LOOPS AND ITERATORS
+
+The 'While' Loop
+
+Sometimes you want to repeat an action in Ruby while a certain condition is true, but you don’t know how many times you’ll have to repeat that action. A good example would be prompting a user for a certain type of input: if they insist on giving you the wrong thing, you may have to re-ask them several times before you get the kind of input you’re looking for.
+
+To accomplish this, we use something called a while loop. It checks to see if a certain condition is true, and while it is, the loop keeps running. As soon as the condition stops being true, the loop stops!
+
+counter = 1
+while counter < 11
+  puts counter
+  counter += 1
+end
+
+
+The 'Until' Loop
+
+The complement to the while loop is the until loop. It’s sort of like a backward while:
+
+i = 0
+until i == 6
+  i = i + 1
+end
+puts i
+
+    In the example above, we first create a variable i and set it to 0 (zero).
+    Then we execute a block of code until i is equal to 6. That block of code increments i.
+    When i is equal to 6, the block ends.
+    Finally, we print 6, the value of i, to the console.
+
+More Assignment Operators
+
+We’ve been using syntax like counter = counter + 1, which works, but as you’ll increasingly find with Ruby, there’s always another way.
+
+A shortcut is to use an assignment operator. You already know one assignment operator: =, which sets a variable. You can update a variable with additional assignment operators, however, which include +=, -=, *=, and /=. For instance, when you type
+
+counter += 1
+
+You’re telling Ruby: “Add 1 to counter, then assign that new value back to counter.” This provides a succinct way of updating variable values in our programs.
+
+Some languages have the increment operators ++ and -- (which also add or subtract 1 from a value), but Ruby does not. You’ll have to make do with += and -=!
+
+Inclusive and Exclusive Ranges
+
+You saw a bit of new syntax in the previous exercise: for num in 1...10. What this says to Ruby is: “For the variable num in the range 1 to 10, do the following.” The following was to puts "#{num}", so as num took on the values of 1 to 9, one at a time, those values were printed to the console.
+
+The reason this program counted to 9 and not 10 was that we used three dots in the range; this tells Ruby to exclude the final number in the count: for num in 1...10 means “go up to but don’t include 10.” If we use two dots, this tells Ruby to include the highest number in the range
+
+
+The Loop Method
+
+So far we’ve learned one way to repeat an action in Ruby: using loops. As is often the case in Ruby, however, there’s more than one way to accomplish a given task. In this case, it’s also possible to repeat an action using an iterator.
+
+An iterator is just a Ruby method that repeatedly invokes a block of code. The code block is just the bit that contains the instructions to be repeated, and those instructions can be just about anything you like!
+
+The simplest iterator is the loop method. You can create a basic (but infinite!) loop by simply typing
+
+loop { print "Hello, world!" }
+
+In Ruby, curly braces ({}) are generally interchangeable with the keywords do (to open the block) and end (to close it). Knowing this, we can write a smarter loop than the one above: rb i = 0 loop do i += 1 print "#{i}" break if i > 5 end
+
+The break keyword is our Get Out of Jail Free card: it breaks a loop as soon as its condition is met.
+
+Next!
+
+The next keyword can be used to skip over certain steps in the loop. For instance, if we don’t want to print out the even numbers, we can write:
+
+for i in 1..5
+  next if i % 2 == 0
+  print i
+end
+
+    In the above example, we loop through the range of 1 through 5, assigning each number to i in turn.
+    If the remainder of i / 2 is zero, we go to the next iteration of the loop.
+    Then we print the value of i. This line only prints out 1, 3, and 5 because of the previous line.
+
+The modulo (%) operator calculates the remainder of a division operation. In this case, it calculates the remainder of i divided by 2. If i is an even number, the result will be 0 and if it is an odd number, the result will be 1. So this if statement checks to see if i is an even number.
+
+The .each Iterator
+
+Great work! You’re really getting the hang of this.
+
+The loop iterator is the simplest, but also one of the least powerful. A more useful iterator is the .each method, which can apply an expression to each element of an object, one at a time. The syntax looks like this:
+
+object.each { |item| 
+  # Do something 
+}
+
+You can also use the do keyword instead of {}:
+
+object.each do |item| 
+  # Do something 
+end
+
+The variable name between | | can be anything you like: it’s just a placeholder for each element of the object you’re using .each on.
+
+
+Try It Out!
+
+Cool, no? Now it’s your turn to take the .each method for a test drive.
+
+
+*****************************************
+numbers = [1, 2, 3, 4, 5]
+
+# one way to loop
+numbers.each { |item| puts item }
+
+# another way to loop
+numbers.each do |item|
+  puts item
+end
+******************************************
+
+
+    In the example above, we create an array called numbers.
+    Then we show two different ways to print each item in numbers to the console.
+
+The .times Iterator
+
+The .times method is like a super compact for loop: it can perform a task on each item in an object a specified number of times.
+
+For example, if we wanted to print out "Chunky bacon!" ten times, we might type
+
+10.times { print "Chunky bacon!" }
+
+We don’t know why we would type that, but we could!
+#########################################################################
+
+The .split Method
+
+Next, we’ll want to divide the user’s input into individual words.
+
+Ruby has a built-in method for this called .split; it takes in a string and returns an array. If we pass it a bit of text in parentheses, .split will divide the string wherever it sees that bit of text, called a delimiter. For example,
+
+text.split(",")
+
+tells Ruby to split up the string text whenever it sees a comma.
+
+********************************************************************************
+
+DATA STRUCTURES
+
+Access by Index
+
+Here’s something interesting about arrays: each element in the array has what’s called an index. The first element is at index 0, the next is at index 1, the following is at index 2, and so on. We can access elements of the array directly through these numbers using brackets, like so:
+
+array = [5, 7, 9, 2, 0]
+array[2]
+# returns "9", since "9"
+# is at index 2
+
+The diagram below shows how these indices work for our sample array, [5, 7, 9, 2, 0]. The first element has index 0, the next has 1, the next has 2, and so on.
+
+        +---+---+---+---+---+
+array   | 5 | 7 | 9 | 2 | 0 |
+        +---+---+---+---+---+
+index     0   1   2   3   4
+
+(This is a bit of an oversimplification, but it gets the idea across for now).
+
+We can access the ith element of an array called array by putting the index in square brackets, like so: array[i]. array[0] gets the first element, array[1] gets the second element, and so on. This is called access by index.
+#########################################################################
+
+The .split Method
+
+Next, we’ll want to divide the user’s input into individual words.
+
+Ruby has a built-in method for this called .split; it takes in a string and returns an array. If we pass it a bit of text in parentheses, .split will divide the string wherever it sees that bit of text, called a delimiter. For example,
+
+text.split(",")
+
+tells Ruby to split up the string text whenever it sees a comma.
+
+********************************************************************************
+
+DATA STRUCTURES
+
+Access by Index
+
+Here’s something interesting about arrays: each element in the array has what’s called an index. The first element is at index 0, the next is at index 1, the following is at index 2, and so on. We can access elements of the array directly through these numbers using brackets, like so:
+
+array = [5, 7, 9, 2, 0]
+array[2]
+# returns "9", since "9"
+# is at index 2
+
+The diagram below shows how these indices work for our sample array, [5, 7, 9, 2, 0]. The first element has index 0, the next has 1, the next has 2, and so on.
+
+        +---+---+---+---+---+
+array   | 5 | 7 | 9 | 2 | 0 |
+        +---+---+---+---+---+
+index     0   1   2   3   4
+
+(This is a bit of an oversimplification, but it gets the idea across for now).
+
+We can access the ith element of an array called array by putting the index in square brackets, like so: array[i]. array[0] gets the first element, array[1] gets the second element, and so on. This is called access by index.
+#########################################################################
+
+The .split Method
+
+Next, we’ll want to divide the user’s input into individual words.
+
+Ruby has a built-in method for this called .split; it takes in a string and returns an array. If we pass it a bit of text in parentheses, .split will divide the string wherever it sees that bit of text, called a delimiter. For example,
+
+text.split(",")
+
+tells Ruby to split up the string text whenever it sees a comma.
+
+********************************************************************************
+
+DATA STRUCTURES
+
+Access by Index
+
+Here’s something interesting about arrays: each element in the array has what’s called an index. The first element is at index 0, the next is at index 1, the following is at index 2, and so on. We can access elements of the array directly through these numbers using brackets, like so:
+
+array = [5, 7, 9, 2, 0]
+array[2]
+# returns "9", since "9"
+# is at index 2
+
+The diagram below shows how these indices work for our sample array, [5, 7, 9, 2, 0]. The first element has index 0, the next has 1, the next has 2, and so on.
+
+        +---+---+---+---+---+
+array   | 5 | 7 | 9 | 2 | 0 |
+        +---+---+---+---+---+
+index     0   1   2   3   4
+
+(This is a bit of an oversimplification, but it gets the idea across for now).
+
+We can access the ith element of an array called array by putting the index in square brackets, like so: array[i]. array[0] gets the first element, array[1] gets the second element, and so on. This is called access by index.
+
+
+Arrays of Non-Numbers
+
+Here’s something you might not have known: you can make an array of any collection of Ruby objects. You can make an array of booleans! An array of strings! The possibilities are (almost) endless.
+
+Arrays of Arrays
+
+You might be asking yourself: “If I can put anything in an array, can I make an array of arrays?” The answer is: yes!
+
+Check out the array of arrays we have in the editor. Arrays of arrays are called multidimensional arrays, since the act of adding more arrays expands the array out of its string-like shape. For instance, the array in the editor is a two-dimensional array.
+
+ntroduction to Hashes
+
+We know that arrays are indexed with numbers that start with 0 and go up to the array’s length minus one. (Think about it: an array with four elements has the indices 0, 1, 2, and 3.)
+
+But what if we want to use numeric indices that don’t go in order from 0 to the end of the array? What if we don’t want to use numbers as indices at all? We’ll need a new array structure called a hash.
+
+Hashes are sort of like JavaScript objects or Python dictionaries. If you haven’t studied those languages, all you need to know that a hash is a collection of key-value pairs. Hash syntax looks like this:
+
+hash = {
+  key1 => value1,
+  key2 => value2,
+  key3 => value3
+}
+
+Values are assigned to keys using =>. You can use any Ruby object for a key or value.
+
+Using Hash.new
+
+What we just showed you was hash literal notation. We call it that because you literally describe what you want in the hash: you give it a name and you set it equal to one or more key => value pairs inside curly braces.
+
+You can also create a hash using Hash.new, like so:
+
+my_hash = Hash.new
+
+Setting a variable equal to Hash.new creates a new, empty hash; it’s the same as setting the variable equal to empty curly braces ({}).
+Accessing Hash Values
+
+You can access values in a hash just like an array.
+
+pets = {
+  "Stevie" => "cat",
+  "Bowser" => "hamster",
+  "Kevin Sorbo" => "fish"
+}
+
+puts pets["Stevie"]
+# will print "cat"
+
+    In the example above, we create a hash called pets.
+    Then we print cat by accessing the key "Stevie" in the pets hash.
+
+Iterating Over Arrays
+
+Iterating over arrays is easier than it looks.
+
+numbers = [1, 2, 3, 4, 5]
+numbers.each { |element| puts element }
+
+    In the example above, we create an array called numbers with 5 elements.
+    Then we say, “Take this array and for each element, print it to the console.” As usual, we can use any placeholder name for the bit between two | | characters.
+
+Iterating Over Multidimensional Arrays
+
+Now let’s see how to iterate over a multidimensional array.
+
+We’ve created a 2-D array, s (for “sandwiches”). We want to iterate over s in such a way that we don’t print out each element as an array, like ["ham", "swiss"], but each element within each sub-array, so we get a list of all the meats and cheeses within s.
+
+If we just wanted to access "swiss", we could type
+
+s[0][1]
+
+Meaning, “bring me the second element of the first element,” which is “swiss.” If we iterate over a regular array using
+
+array.each { |element| action }
+
+then how might we iterate over an array of arrays?
+
+s = [["ham", "swiss"], ["turkey", "cheddar"], ["roast beef", "gruyere"]]
+
+s.each do |sub_array|
+sub_array.each do |item|
+    puts item
+  end
+end
+  
+
+Iterating Over Hashes
+
+When iterating over hashes, we need two placeholder variables to represent each key/value pair.
+
+restaurant_menu = {
+  "noodles" => 4,
+  "soup" => 3,
+  "salad" => 2
+}
+
+restaurant_menu.each do |item, price|
+  puts "#{item}: #{price}"
+end
+
+    In the example above, we create a new hash called restaurant_menu.
+    Then, we loop through the restaurant_menu hash and assign the key to item and the value to price for each iteration.
+    Finally, we puts out:
+
+noodles: 4
+soup: 3
+salad: 2
+*******************************************
+
+
+
+:: is basically a namespace resolution operator. It allows you to access items in modules, or class-level items in classes. For example, say you had this setup:
+
+module SomeModule
+    module InnerModule
+        class MyClass
+            CONSTANT = 4
+        end
+    end
+end
+
+You could access CONSTANT from outside the module as SomeModule::InnerModule::MyClass::CONSTANT.
+It doesn't affect instance methods defined on a class, since you access those with a different syntax (the dot .).
+
+Relevant note: If you want to go back to the top-level namespace, do this: ::SomeModule 
+
+
+
+
+A variable prefixed with @ is an instance variable, while one prefixed with @@ is a class variable. Check out the following example; its output is in the comments at the end of the puts lines:
+
+class Test
+  @@shared = 1
+
+  def value
+    @@shared
+  end
+
+  def value=(value)
+    @@shared = value
+  end
+end
+
+class AnotherTest < Test; end
+
+t = Test.new
+puts "t.value is #{t.value}" # 1
+t.value = 2
+puts "t.value is #{t.value}" # 2
+
+x = Test.new
+puts "x.value is #{x.value}" # 2
+
+a = AnotherTest.new
+puts "a.value is #{a.value}" # 2
+a.value = 3
+puts "a.value is #{a.value}" # 3
+puts "t.value is #{t.value}" # 3
+puts "x.value is #{x.value}" # 3
+
+You can see that @@shared is shared between the classes; setting the value in an instance of one changes the value for all other instances of that class and even child classes, where a variable named @shared, with one @, would not be.
+
+[Update]
+
+As Phrogz mentions in the comments, it's a common idiom in Ruby to track class-level data with an instance variable on the class itself. This can be a tricky subject to wrap your mind around, and there is plenty of additional reading on the subject, but think about it as modifying the Class class, but only the instance of the Class class you're working with. An example:
+
+class Polygon
+  class << self
+    attr_accessor :sides
+  end
+end
+
+class Triangle < Polygon
+  @sides = 3
+end
+
+class Rectangle < Polygon
+  @sides = 4
+end
+
+class Square < Rectangle
+end
+
+class Hexagon < Polygon
+  @sides = 6
+end
+
+puts "Triangle.sides:  #{Triangle.sides.inspect}"  # 3
+puts "Rectangle.sides: #{Rectangle.sides.inspect}" # 4
+puts "Square.sides:    #{Square.sides.inspect}"    # nil
+puts "Hexagon.sides:   #{Hexagon.sides.inspect}"   # 6
+
+I included the Square example (which outputs nil) to demonstrate that this may not behave 100% as you expect; the article I linked above has plenty of additional information on the subject.
+
+Also keep in mind that, as with most data, you should be extremely careful with class variables in a multithreaded environment, as per dmarkow's comment.
+
+
+***********************************************
+
+If
+
+Ruby’s if statement takes an expression, which is just a fancy word for something that has a value that evaluates to either true or false. If that expression is true, Ruby executes the block of code that follows the if. If it’s not true (that is, false), Ruby doesn’t execute that block of code: it skips it and goes on to the next thing.
+
+Here’s an example of an if statement in action:
+
+if 1 < 2
+  print "I'm getting printed because one is less than two!"
+end
+
+Ruby doesn’t care about whitespace (spaces and blank lines), so the indentation of the print statement isn’t necessary. However, it’s a convention that Rubyists (Ruby enthusiasts) follow, so it’s good to get in the habit now. The block of code following an if should be indented two spaces.
+
+When you’re done with your if, you have to tell Ruby by typing end.
+
+
+Else
+
+The partner to the if statement is the else statement. An if/else statement says to Ruby: “If this expression is true, run this code block; otherwise, run the code after the else statement.” Here’s an example:
+
+if 1 > 2
+  print "I won't get printed because one is less than two."
+else
+  print "That means I'll get printed!"
+end
+
+Elsif
+
+What if you want more than two options, though? It’s elsif to the rescue! The elsif statement can add any number of alternatives to an if/else statement, like so:
+
+if x < y  # Assumes x and y are defined
+  puts "x is less than y!"
+elsif x > y
+  puts "x is greater than y!"
+else
+  puts "x equals y!"
+end
+
+Unless
+
+Sometimes you want to use control flow to check if something is false, rather than if it’s true. You could reverse your if/else, but Ruby will do you one better: it will let you use an unless statement.
+
+Let’s say you don’t want to eat unless you’re hungry. That is, while you’re not hungry, you write programs, but if you are hungry, you eat. You might write that program in Ruby like this:
+
+unless hungry
+  # Write some sweet programs
+else
+  # Have some noms
+end
+
+Equal or Not?
+
+In Ruby, we assign values to variables using =, the assignment operator. But if we’ve already used = for assignment, how do we check to see if two things are equal? Well, we use ==, which is a comparator (also called a relational operator). == means “is equal to.” When you type
+
+x = 2
+y = 2
+if x == y
+  print "x and y are equal!"
+end
+
+you’re saying: “if x equals y, print ‘x and y are equal!’” You can also check to see if two values are not equal using the != comparator.
+
+
+Less Than or Greater Than
+
+We can also check to see if one value is less than, less than or equal to, greater than, or greater than or equal to another. Those operators look like this:
+
+    Less than: <
+    Less than or equal to: <=
+    Greater than: >
+    Greater than or equal to: >=
+
+And
+
+Comparators aren’t the only operators available to you in Ruby. You can also use logical or boolean operators. Ruby has three: and (&&), or (||), and not (!). Boolean operators result in boolean values: true or false.
+
+The boolean operator and, &&, only results in true when both expression on either side of && are true. Here’s how && works:
+
+true && true # => true
+true && false # => false
+false && true # => false
+false && false # => false
+
+For example, 1 < 2 && 2 < 3 is true because it’s true that one is less than two and that two is less than three.
+
+
+Or
+
+Ruby also has the or operator (||). Ruby’s || is called an inclusive or because it evaluates to true when one or the other or both expressions are true. Check it out:
+
+true || true # => true
+true || false # => true
+false || true # => true
+false || false # => false
+
+Not
+
+Finally, Ruby has the boolean operator not (!). ! makes true values false, and vice-versa.
+
+!true # => false
+!false # => true
+
+Combining Boolean Operators
+
+You can combine boolean operators in your expressions. Combinations like
+
+(x && (y || w)) && z
+
+are not only legal expressions, but are extremely useful tools for your programs.
+
+These expression may take some getting used to, but you can always use parentheses to control the order of evaluation. Expressions in parentheses are always evaluated before anything outside parentheses.
+
